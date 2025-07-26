@@ -6,16 +6,19 @@
  */
 
 import {
-  View,
   Platform,
   StatusBar,
   SafeAreaView,
   TextInput,
+  Switch,
+  KeyboardAvoidingView,
 } from 'react-native';
 import { styles } from './styles';
 import { Button } from '../components/Button';
-import { Input } from '../components/Input';
+
 import { useRef, useState } from 'react';
+import { Input } from '../components/Input';
+import { TextArea } from '../components/TextArea';
 
 console.log(Platform.OS, Platform.Version);
 
@@ -24,19 +27,28 @@ function App() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [textArea, setTextArea] = useState('');
+  const [selected, setSelected] = useState(false);
 
   return (
     <SafeAreaView style={styles.wrapper}>
-      <View style={styles.container}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.container}
+      >
         <StatusBar barStyle="dark-content" />
 
-        <TextInput
-          placeholder="Descrição..."
-          style={styles.textArea}
-          multiline
-          textAlignVertical="top"
+        <Switch
+          style={{ alignSelf: 'flex-start' }}
+          value={selected}
+          onValueChange={setSelected}
+          thumbColor="purple"
+          trackColor={{
+            false: 'yellow',
+            true: '#0fa0fa',
+          }}
         />
-
+        <TextArea value={textArea} onChangeText={setTextArea} />
         <Input
           placeholder="E-mail"
           keyboardType="email-address"
@@ -60,7 +72,7 @@ function App() {
         />
 
         <Button onPress={() => console.log('Clicou')}>Entrar</Button>
-      </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
